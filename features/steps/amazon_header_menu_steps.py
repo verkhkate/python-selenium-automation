@@ -5,6 +5,14 @@ from selenium.webdriver.common.by import By
 from behave import given, when, then
 import time
 
+SUB_LINKS_UNDER_BEST_SELLERS = (By.CSS_SELECTOR, 'div ul li a[href*="/ref=zg_"]')
+
+@then('Verify there are {expected_amount} sub-links under Best Sellers tab')
+def verify_sub_links_under_best_sellers(context, expected_amount):
+    expected_amount = int(expected_amount)
+    sub_links_under_best_sellers = context.driver.find_elements(*SUB_LINKS_UNDER_BEST_SELLERS)
+    assert len(sub_links_under_best_sellers) == expected_amount, f'Error! Expected {expected_amount} of sub-links under Best Sellers tab, but got {len(sub_links_under_best_sellers)}'
+
 
 @when('Click on New Releases page')
 def click_on_new_releases(context):

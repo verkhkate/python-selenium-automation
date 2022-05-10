@@ -1,5 +1,12 @@
 Feature: TESTS FOR AMAZON HEADER MENU
 
+  Scenario: Verify amount of sub-links under "Best Sellers" tab
+    Given Open Amazon page
+    When Verify Amazon page is opened
+    And Click on Best Sellers
+    Then Verify there are 5 sub-links under Best Sellers tab
+
+
   Scenario: Verify "Best Sellers" tab
     Given Open Amazon page
     When Verify Amazon page is opened
