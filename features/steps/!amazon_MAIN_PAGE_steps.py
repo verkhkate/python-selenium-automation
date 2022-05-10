@@ -39,14 +39,14 @@ def click_on_cart(context):
 
 
 # HEADER MENU
-@when('Click on "Best Sellers"')
+@when('Click on Best Sellers')
 def click_on_best_sellers(context):
     best_sellers = context.driver.find_element(By.CSS_SELECTOR, "#nav-xshop-container [data-csa-c-content-id='nav_cs_bestsellers']")
     best_sellers.click()
     time.sleep(1)
 
 
-@then('Verify that "Best Sellers" page is opened')
+@then('Verify that Best Sellers page is opened')
 def verify_best_sellers_opened(context):
     actual_result = context.driver.find_element(By.CSS_SELECTOR, "#zg_banner_text").text
     expected_result = 'Amazon Best Sellers'
