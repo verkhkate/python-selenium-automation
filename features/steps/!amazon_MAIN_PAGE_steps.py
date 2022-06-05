@@ -12,11 +12,15 @@ HAM_MENU_BTN = (By.ID, 'nav-hamburger-menu')
 FOOTER_LINKS = (By.CSS_SELECTOR, 'td.navFooterDescItem a')
 SIGN_IN_BTN = (By.CSS_SELECTOR, "#nav-signin-tooltip .nav-action-inner")
 CART_EMPTY = (By.XPATH, "//h2[contains(text(), 'Your Amazon Cart is empty')]")
+SEARCH_RESULTS = (By.CSS_SELECTOR, "[data-component-type='s-search-result']")
+PRODUCT_TITLE = (By.CSS_SELECTOR, 'h2 span.a-text-normal')
+PRODUCT_IMG = (By.CSS_SELECTOR, ".s-image[data-image-latency='s-product-image']")
 
 
 @given('Open Amazon page')
 def open_amazon_page(context):
-    context.driver.get('https://www.amazon.com/')
+    #context.driver.get('https://www.amazon.com/')
+    context.app.main_page.open_main_page()
     time.sleep(1)
 
 
@@ -27,22 +31,29 @@ def verify_amazon_page_opened(context):
     assert expected_result == actual_result, f'Test case failed! Actual text {actual_result} does not match expected {expected_result}'
 
 
+@when('Wait for {seconds} seconds')
+def wait_sec(context, seconds):
+    time.sleep(int(seconds)) # "5" => 5
+
+
 # SEARCH
 @when('Search for {search_word}')
 def search_amazon(context, search_word):
-    context.driver.find_element(*SEARCH_INPUT).send_keys(search_word)
-    context.driver.find_element(*SEARCH_BTN).click()
+    # context.driver.find_element(*SEARCH_INPUT).send_keys(search_word)
+    # context.driver.find_element(*SEARCH_BTN).click()
+    context.app.header.search_amazon(search_word)
     time.sleep(3)
 
 
 # TOP HEADER
-@when('Click on Cart')
+@when('Click on cart')
 def click_on_cart(context):
-    cart = context.driver.find_element(By.ID, "nav-cart-count-container")
-    cart.click()
-    cart_is_empty = context.driver.wait.until(
-        EC.visibility_of_element_located(CART_EMPTY), '"Your Amazon Cart is empty" text is not visible'
-    )
+    context.app.main_page.click_on_cart()
+    # cart = context.driver.find_element(By.ID, "nav-cart-count-container")
+    # cart.click()
+    # cart_is_empty = context.driver.wait.until(
+    #     EC.visibility_of_element_located(CART_EMPTY), '"Your Amazon Cart is empty" text is not visible'
+    # )
 
 
 @when('Click on button from SignIn popup')
@@ -51,6 +62,25 @@ def click_sign_in_btn(context):
         EC.element_to_be_clickable(SIGN_IN_BTN), 'Sign in btn not clickable'
     )
     sign_in_btn.click()
+
+
+@then('Verify that every product has a name and an image')
+def verify_products_name_img(context):
+    all_products = context.driver.find_elements(*SEARCH_RESULTS)
+    for product in all_products:
+        title = product.find_element(*PRODUCT_TITLE).text
+        assert title, 'Error! Title should not be blank'
+        product.find_element(*PRODUCT_IMG)
+
+
+@then('SignIn popup is present')
+def verify_signin_popup_present(context):
+    context.driver.wait.until(EC.element_to_be_clickable(SIGN_IN_BTN), 'Sign in btn not clickable')
+
+
+@then('SignIn popup disappears')
+def verify_signin_popup_not_present(context):
+    context.driver.wait.until_not(EC.element_to_be_clickable(SIGN_IN_BTN), 'Sign in btn did not disappear')
 
 
 # HEADER MENU

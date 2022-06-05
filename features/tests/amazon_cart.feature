@@ -9,6 +9,7 @@ Feature: TESTS FOR AMAZON CART
     Given Open Amazon page
     When Search for toys
     Then Verify search results for "toys" are shown
+    Then Scroll down
     And Click on any item
     Then Verify item is opened
     And Add item to the Cart

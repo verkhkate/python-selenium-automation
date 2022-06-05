@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 from behave import *
 import time
 
-SEARCH_RESULT_TEXT = (By.XPATH, "//span[@class='a-color-state a-text-bold']")
+#SEARCH_RESULT_TEXT = (By.XPATH, "//span[@class='a-color-state a-text-bold']")
 PRODUCT_QUANTITY = (By.CSS_SELECTOR, "h2 span.a-size-base-plus/*[aria-hidden*='false']")
 PRODUCT_QUANTITY_HIDDEN = (By.CSS_SELECTOR, ".a-carousel-card[aria-hidden= 'true']")
 PRODUCT_NAME = (By.XPATH, "//h2/a/span[contains(@class, 'a-size-base-plus a-color-base a-text-normal') and contains(text(), '')]")
@@ -11,10 +11,10 @@ PRODUCT_IMAGE = (By.CSS_SELECTOR, ".sg-col-inner .s-image-tall-aspect")
 
 @then('Verify search results for {expected_result} are shown')
 def verify_search_results(context, expected_result):
-    actual_result = context.driver.find_element(*SEARCH_RESULT_TEXT).text
-    assert expected_result == actual_result, \
-        f'Test case failed! Actual text {actual_result} does not match expected {expected_result}'
-
+    # actual_result = context.driver.find_element(*SEARCH_RESULT_TEXT).text
+    # assert expected_result == actual_result, \
+    #      f'Test case failed! Actual text {actual_result} does not match expected {expected_result}'
+    context.app.search_results_page.verify_search_results(expected_result)
 
 @then('Verify that every product on Amazon search results page has product name and image')
 def verify_product_name_and_image(context):
@@ -53,5 +53,7 @@ def scroll_to_bottom(context):
 
 @then('Scroll down')
 def scroll_down(context):
-    context.driver.execute_script("window.scrollTo(0, 300)")
+    # context.driver.execute_script("window.scrollTo(0, 300)")
+    # time.sleep(1)
+    context.app.search_results_page.scroll_down()
     time.sleep(1)

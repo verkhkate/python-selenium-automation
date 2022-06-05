@@ -1,21 +1,25 @@
 from selenium import webdriver
-
+from selenium.webdriver.support.wait import WebDriverWait
+from app.application import Application
 
 def browser_init(context):
     """
     :param context: Behave context
     """
     context.driver = webdriver.Chrome()
-    # context.browser = webdriver.Safari()
-    # context.browser = webdriver.Firefox()
-
+    #context.browser = webdriver.Safari()
+    #context.browser = webdriver.Firefox()
+    context.driver.delete_all_cookies()
     context.driver.maximize_window()
     context.driver.implicitly_wait(4)
+    context.driver.wait = WebDriverWait(context.driver, timeout=10)
+    context.app = Application(context.driver)
 
 
 def before_scenario(context, scenario):
     print('\nStarted scenario: ', scenario.name)
     browser_init(context)
+    context.driver.delete_all_cookies()
 
 
 def before_step(context, step):
