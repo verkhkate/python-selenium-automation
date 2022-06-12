@@ -1,3 +1,5 @@
+# STEPS FOR AMAZON PRODUCT DETAILS PAGE
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from behave import when, given, then
@@ -42,3 +44,13 @@ def verify_clicking_colors(context):
 
     assert actual_colors == expected_colors, f'Error! Expected {expected_colors}, ' \
                                              f'but got {actual_colors}'
+
+
+@when('Hover over New Arrivals')
+def hover_new_arrivals(context):
+    context.app.product_details_page.hover_new_arrivals()
+
+
+@then('Verify New Arrival deals are present')
+def verify_new_arrivals_deals(context):
+    context.app.product_details_page.verify_new_arrivals_deals()
